@@ -1,0 +1,22 @@
+{
+  "name": "railgun",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ColinPelkmans/Railgun.git"
+  },
+  "author": "Colin Pelkmans, Arthur Verstraete",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ColinPelkmans/Railgun/issues"
+  },
+  "homepage": "https://github.com/ColinPelkmans/Railgun#readme",
+  "dependencies": {
+    "@abandonware/bleno": "^0.5.1-1"
+  }
+}
