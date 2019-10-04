@@ -16,7 +16,8 @@ const BATTERY_LEVEL_CHARACTERISTIC_UUID = "2A19";
 const RAILGUN_COMMAND_SERVICE_UUID = "aff29153-b006-4cac-9b87-2b1c1a1c0963";
 const RAILGUN_CHARGE_CHARACTERISTIC_UUID = "cbdf2bed-623f-467f-b412-697d7b8339a4";
 
-const RAILGUN_FIRE_CHARACTERISTIC_UUID = "3853e675-d68d-4589-9d72-f43dcb059173";
+const RAILGUN_SHOOT_SERVICE_UUID = "3853e675-d68d-4589-9d72-f43dcb059173";
+const RAILGUN_SHOOT_CHARACTERISTIC_UUID = "cbdf2bed-623f-467f-b412-697d7b8339a4";
 
 class RailGun extends EventEmitter {
     constructor() {
@@ -83,11 +84,52 @@ class RailgunChargeCharacteristic extends bleno.Characteristic {
                 callback(this.RESULT_INVALID_ATTRIBUTE_LENGTH);
                 return;
             }
-            console.log(`data: ${data}`);
+
             let value = data.readUInt8();
             console.log(`Received command to charge railgun: ${value}`);
             this.railgun.charge(value);
             callback(this.RESULT_SUCCESS);
+        } catch (err) {
+            console.error(err);
+            callback(this.RESULT_UNLIKELY_ERROR);
+        }
+    }
+}
+
+class RailgunFireCharacteristic extends bleno.Characteristic {
+    constructor(railgun) {
+        super({
+            uuid: RAILGUN_SHOOT_CHARACTERISTIC_UUID,
+            properties: ["write"],
+            value: null,
+            descriptors: [
+                new bleno.Descriptor({
+                    uuid: "2901",
+                    value: "Fire Railgun"
+                })
+            ]
+        });
+
+        this.railgun = railgun;
+    }
+
+    onWriteRequest(data, offset, withoutResponse, callback) {
+        try {
+            if (data.length != 1) {
+                callback(this.RESULT_INVALID_ATTRIBUTE_LENGTH);
+                return;
+            }
+
+            let value = data.readUInt8();
+            console.log(`Received value for firing railgun: ${value}`);
+            if (value === 10) {
+                console.log(`Firing railgun`);
+                this.railgun.fire();  
+            } else {
+                console.log(`Value (${value}) is not the correct value`)
+            }
+            callback(this.RESULT_SUCCESS);
+            
         } catch (err) {
             console.error(err);
             callback(this.RESULT_UNLIKELY_ERROR);
@@ -183,7 +225,14 @@ bleno.on("advertisingStart", err => {
         ]
     });
 
-    bleno.setServices([batteryService, commandService], err => {
+    let shootService = new bleno.PrimaryService({
+        uuid: RAILGUN_SHOOT_SERVICE_UUID,
+        characteristics: [
+            new RailgunFireCharacteristic(hugeCannon)
+        ]
+    });
+
+    bleno.setServices([batteryService, commandService, shootService], err => {
         if (err) console.log(err);
         else console.log("Services configured");
     });
@@ -199,37 +248,3 @@ bleno.on("servicesSetError", err => console.log("Bleno: servicesSetError"));
 bleno.on("accept", clientAddress => console.log(`Bleno: accept ${clientAddress}`));
 bleno.on("disconnect", clientAddress => console.log(`Bleno: disconnect ${clientAddress}`));
 
-class RailgunFireCharacteristic extends bleno.Characteristic {
-    constructor(railgun) {
-        super({
-            uuid: RAILGUN_FIRE_CHARACTERISTIC_UUID,
-            properties: ["write"],
-            value: null,
-            descriptors: [
-                new bleno.Descriptor({
-                    uuid: "2901",
-                    value: "Fire Railgun"
-                })
-            ]
-        });
-
-        this.railgun = railgun;
-    }
-
-    onWriteRequest(data, offset, withoutResponse, callback) {
-        try {
-            if (data.length != 1) {
-                callback(this.RESULT_INVALID_ATTRIBUTE_LENGTH);
-                return;
-            }
-
-            let hugeCannon = new RailGun();
-            console.log(`Received command to fire railgun`);
-            this.hugeCannon.fire();
-            callback(this.RESULT_SUCCESS);
-        } catch (err) {
-            console.error(err);
-            callback(this.RESULT_UNLIKELY_ERROR);
-        }
-    }
-}
