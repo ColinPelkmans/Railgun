@@ -224,7 +224,7 @@ bleno.on("advertisingStart", err => {
         ]
     });
 
-    bleno.setServices([batteryService, commandService, shootService], err => {
+    bleno.setServices([batteryService, commandService], err => {
         if (err) console.log(err);
         else console.log("Services configured");
     });
