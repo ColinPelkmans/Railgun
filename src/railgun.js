@@ -18,6 +18,7 @@ const RAILGUN_CHARGE_CHARACTERISTIC_UUID = "cbdf2bed-623f-467f-b412-697d7b8339a4
 
 const RAILGUN_SHOOT_SERVICE_UUID = "3853e675-d68d-4589-9d72-f43dcb059173";
 const RAILGUN_SHOOT_CHARACTERISTIC_UUID = "cbdf2bed-623f-467f-b412-697d7b8339a4";
+const RAILGUN_FIRE_CHARACTERISTIC_UUID = "3853e675-d68d-4589-9d72-f43dcb059173";
 
 class RailGun extends EventEmitter {
     constructor() {
@@ -247,4 +248,3 @@ bleno.on("servicesSet", err => console.log("Bleno: servicesSet"));
 bleno.on("servicesSetError", err => console.log("Bleno: servicesSetError"));
 bleno.on("accept", clientAddress => console.log(`Bleno: accept ${clientAddress}`));
 bleno.on("disconnect", clientAddress => console.log(`Bleno: disconnect ${clientAddress}`));
-
