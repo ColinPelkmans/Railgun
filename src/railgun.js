@@ -23,7 +23,7 @@ class RailGun extends EventEmitter {
 
         setInterval(() => {
             this.use_power(1);
-        }, 5000);
+        }, 60000);
     }
 
     fire() {
