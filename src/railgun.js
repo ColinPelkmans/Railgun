@@ -81,7 +81,7 @@ class RailgunChargeCharacteristic extends bleno.Characteristic {
                 callback(this.RESULT_INVALID_ATTRIBUTE_LENGTH);
                 return;
             }
-
+            console.log(`data: ${data}`);
             let value = data.readUInt8();
             console.log(`Received command to charge railgun: ${value}`);
             this.railgun.charge(value);
