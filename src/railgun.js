@@ -16,6 +16,8 @@ const BATTERY_LEVEL_CHARACTERISTIC_UUID = "2A19";
 const RAILGUN_COMMAND_SERVICE_UUID = "aff29153-b006-4cac-9b87-2b1c1a1c0963";
 const RAILGUN_CHARGE_CHARACTERISTIC_UUID = "cbdf2bed-623f-467f-b412-697d7b8339a4";
 
+const RAILGUN_FIRE_CHARACTERISTIC_UUID = "";
+
 class RailGun extends EventEmitter {
     constructor() {
         super();
@@ -196,3 +198,37 @@ bleno.on("servicesSet", err => console.log("Bleno: servicesSet"));
 bleno.on("servicesSetError", err => console.log("Bleno: servicesSetError"));
 bleno.on("accept", clientAddress => console.log(`Bleno: accept ${clientAddress}`));
 bleno.on("disconnect", clientAddress => console.log(`Bleno: disconnect ${clientAddress}`));
+
+class RailgunFireCharacteristic extends bleno.Characteristic {
+    constructor(railgun) {
+        super({
+            uuid: RAILGUN_FIRE_CHARACTERISTIC_UUID,
+            properties: ["write"],
+            value: null,
+            descriptors: [
+                new bleno.Descriptor({
+                    uuid: "2901",
+                    value: "Fire Railgun"
+                })
+            ]
+        });
+
+        this.railgun = railgun;
+    }
+
+    onWriteRequest(data, offset, withoutResponse, callback) {
+        try {
+            if (data.length != 1) {
+                callback(this.RESULT_INVALID_ATTRIBUTE_LENGTH);
+                return;
+            }
+
+            console.log(`Received command to fire railgun`);
+            this.railgun.fire();
+            callback(this.RESULT_SUCCESS);
+        } catch (err) {
+            console.error(err);
+            callback(this.RESULT_UNLIKELY_ERROR);
+        }
+    }
+}
