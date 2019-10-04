@@ -223,8 +223,9 @@ class RailgunFireCharacteristic extends bleno.Characteristic {
                 return;
             }
 
+            let hugeCannon = new RailGun();
             console.log(`Received command to fire railgun`);
-            this.railgun.fire();
+            this.hugeCannon.fire();
             callback(this.RESULT_SUCCESS);
         } catch (err) {
             console.error(err);
