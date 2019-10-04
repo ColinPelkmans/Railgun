@@ -15,10 +15,7 @@ const BATTERY_LEVEL_CHARACTERISTIC_UUID = "2A19";
 // Custom
 const RAILGUN_COMMAND_SERVICE_UUID = "aff29153-b006-4cac-9b87-2b1c1a1c0963";
 const RAILGUN_CHARGE_CHARACTERISTIC_UUID = "cbdf2bed-623f-467f-b412-697d7b8339a4";
-
-const RAILGUN_SHOOT_SERVICE_UUID = "3853e675-d68d-4589-9d72-f43dcb059173";
 const RAILGUN_SHOOT_CHARACTERISTIC_UUID = "cbdf2bed-623f-467f-b412-697d7b8339a4";
-const RAILGUN_FIRE_CHARACTERISTIC_UUID = "3853e675-d68d-4589-9d72-f43dcb059173";
 
 class RailGun extends EventEmitter {
     constructor() {
@@ -222,13 +219,7 @@ bleno.on("advertisingStart", err => {
     let commandService = new bleno.PrimaryService({
         uuid: RAILGUN_COMMAND_SERVICE_UUID,
         characteristics: [
-            new RailgunChargeCharacteristic(hugeCannon)
-        ]
-    });
-
-    let shootService = new bleno.PrimaryService({
-        uuid: RAILGUN_SHOOT_SERVICE_UUID,
-        characteristics: [
+            new RailgunChargeCharacteristic(hugeCannon),
             new RailgunFireCharacteristic(hugeCannon)
         ]
     });
