@@ -7,6 +7,7 @@ let connect = () => {
       {services: [
           // All accessible services need to be added
           'battery_service',
+          'aff29153-b006-4cac-9b87-2b1c1a1c0963',
           'cbdf2bed-623f-467f-b412-697d7b8339a4',
           '71773603-69ef-4cc1-aa86-2f4cad052100'
         ]
