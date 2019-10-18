@@ -7,10 +7,11 @@ let connect = () => {
       {services: [
           // All accessible services need to be added
           'battery_service',
-          'eac9cf2d-1d6e-4ab5-8582-bdc124b15e52'
+          'cbdf2bed-623f-467f-b412-697d7b8339a4',
+          '71773603-69ef-4cc1-aa86-2f4cad052100'
         ]
       },
-      { name: 'railgun' }
+      { name: 'Judas' }
     ]
   })
   .then(dev => {
@@ -53,17 +54,41 @@ let handleBatteryLevelNotification = (event) => {
 }
 
 let shoot = () => {
-  log("Shooting");
+  if (device) {
+    log("firing railgun ...");
+    log("Getting RailgunCommand Service ...");
+    device.gatt.getPrimaryService('aff29153-b006-4cac-9b87-2b1c1a1c0963')
+    .then(service => {
+      log('Getting Charge Characteristic ...');
+      return service.getCharacteristic('71773603-69ef-4cc1-aa86-2f4cad052100');
+    })
+    .then(characteristic => {
+      log('Writing fire Characteristic ...');
+
+      // Writing 1 is the signal to reset energy expended.
+      let firingcmd = Uint8Array.of(10);
+      return characteristic.writeValue(firingcmd);
+    })
+    .then(_ => {
+      log('Railgun successfully fired');
+    })
+    .catch(error => {
+      log('ERROR ' + error);
+    });
+
+  } else {
+    log("Not connected to a railgun");
+  }
 }
 
 let reload = () => {
   if (device) {
     log("Reloading railgun ...");
     log("Getting RailgunCommand Service ...");
-    device.gatt.getPrimaryService('eac9cf2d-1d6e-4ab5-8582-bdc124b15e52')
+    device.gatt.getPrimaryService('aff29153-b006-4cac-9b87-2b1c1a1c0963')
     .then(service => {
       log('Getting Charge Characteristic ...');
-      return service.getCharacteristic('b65a60ce-b0e9-43a3-a991-4a908a5705bc');
+      return service.getCharacteristic('cbdf2bed-623f-467f-b412-697d7b8339a4');
     })
     .then(characteristic => {
       log('Writing Charge Characteristic ...');
