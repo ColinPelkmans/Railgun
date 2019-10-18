@@ -60,11 +60,11 @@ let shoot = () => {
     log("Getting RailgunCommand Service ...");
     device.gatt.getPrimaryService('aff29153-b006-4cac-9b87-2b1c1a1c0963')
     .then(service => {
-      log('Getting Charge Characteristic ...');
+      log('Getting Fire Characteristic ...');
       return service.getCharacteristic('71773603-69ef-4cc1-aa86-2f4cad052100');
     })
     .then(characteristic => {
-      log('Writing fire Characteristic ...');
+      log('Writing Fire Characteristic ...');
 
       // Writing 1 is the signal to reset energy expended.
       let firingcmd = Uint8Array.of(10);
