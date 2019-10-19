@@ -13,3 +13,9 @@ Added function for shooting, to shoot the railgun, the 'Unknown Service' then th
 The UUID "cbdf2bed-623f-467f-b412-697d7b8339a4" is to charge the device.
 
 Contributers: Colin Pelkmans, Arthur Verstraete
+
+# Devision of tasks
+## Arthur
+shoot function backend and frontend
+## Colin
+pm2
